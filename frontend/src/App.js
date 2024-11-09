@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
-  const [data, setData] = useState(null);
+  const [greeting, setGreeting] = useState(null);
+  const [randomNumber, setRandomNumber] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/data')
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error("Error fetching data:", error));
+    const fetchGreeting = () => {
+      fetch('http://localhost:8080/api/greeting')
+        .then(response => response.json())
+        .then(greeting => setGreeting(greeting))
+        .catch(error => console.error("Error fetching greeting:", error));
+    };
+    fetchGreeting();
+
+    const fetchRandomNumber = () => {
+      fetch('http://localhost:8080/api/random_number')
+        .then((response) => response.json())
+        .then((data) => setRandomNumber(data))
+        .catch((error) => console.error("Error fetching random number:", error));
+    };
+    const randomNumberIntervalId = setInterval(fetchRandomNumber, 50);
+
+    fetchRandomNumber();
+    return () => clearInterval(randomNumberIntervalId);
   }, []);
 
   const [name, setName] = useState('');
@@ -39,7 +54,7 @@ function App() {
   return (
     <div className="App">
       <h1>React & Flask Integration</h1>
-      {data ? <p>{data.message}</p> : <p>Loading...</p>}
+      {greeting ? <p>{greeting.message}</p> : <p>Loading...</p>}
       <h1>Submit Your Information</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -62,6 +77,8 @@ function App() {
         </div>
         <button type="submit">Submit</button>
       </form>
+      <h1>Periodic Data Fetch</h1>
+      <p>Data: {randomNumber ? JSON.stringify(randomNumber.value) : "Loading..."}</p>
     </div>
   );
 }

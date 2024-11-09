@@ -1,3 +1,5 @@
+import random
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -7,8 +9,8 @@ CORS(
 )  # Allow only frontend origin
 
 
-@app.route("/api/data", methods=["GET"])
-def get_data():
+@app.route("/api/greeting", methods=["GET"])
+def get_greeting():
     data = {"message": "Hello from Flask!"}
     return jsonify(data)
 
@@ -28,6 +30,13 @@ def process_form():
         "message": f"Received name: {name} and number: {number}",
     }
     return jsonify(response), 200
+
+
+@app.route("/api/random_number", methods=["GET"])
+def get_random_number():
+    num = random.random()
+    data = {"value": num}
+    return jsonify(data)
 
 
 if __name__ == "__main__":
