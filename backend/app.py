@@ -1,13 +1,34 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})  # Allow only frontend origin
+CORS(
+    app, resources={r"/api/*": {"origins": "http://localhost:3000"}}
+)  # Allow only frontend origin
 
-@app.route('/api/data', methods=['GET'])
+
+@app.route("/api/data", methods=["GET"])
 def get_data():
-    data = {'message': 'Hello from Flask!'}
+    data = {"message": "Hello from Flask!"}
     return jsonify(data)
 
-if __name__ == '__main__':
+
+@app.route("/api/process_form", methods=["POST"])
+def process_form():
+    data = request.get_json()  # Get the JSON data from the request body
+    name = data.get("name")
+    number = data.get("number")
+
+    # Process the data as needed (e.g., store it in a database or perform calculations)
+    print(f"Received Name: {name}, Number: {number}")
+
+    # Example response
+    response = {
+        "status": "success",
+        "message": f"Received name: {name} and number: {number}",
+    }
+    return jsonify(response), 200
+
+
+if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
