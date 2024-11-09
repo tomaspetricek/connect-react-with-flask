@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { RANDOM_NUMBER_URL, GREETING_URL, PROCESS_FORM_URL, RANDOM_NUMBER_REFRESH_RATE_SECONDS } from './config';
+
 
 function App() {
   const [greeting, setGreeting] = useState(null);
@@ -6,7 +8,7 @@ function App() {
 
   useEffect(() => {
     const fetchGreeting = () => {
-      fetch('http://localhost:8080/api/greeting')
+      fetch(GREETING_URL)
         .then(response => response.json())
         .then(greeting => setGreeting(greeting))
         .catch(error => console.error("Error fetching greeting:", error));
@@ -14,12 +16,12 @@ function App() {
     fetchGreeting();
 
     const fetchRandomNumber = () => {
-      fetch('http://localhost:8080/api/random_number')
+      fetch(RANDOM_NUMBER_URL)
         .then((response) => response.json())
         .then((data) => setRandomNumber(data))
         .catch((error) => console.error("Error fetching random number:", error));
     };
-    const randomNumberIntervalId = setInterval(fetchRandomNumber, 50);
+    const randomNumberIntervalId = setInterval(fetchRandomNumber, RANDOM_NUMBER_REFRESH_RATE_SECONDS);
 
     fetchRandomNumber();
     return () => clearInterval(randomNumberIntervalId);
@@ -35,7 +37,7 @@ function App() {
     const formData = { name, number };
 
     // Send a POST request to the backend
-    fetch('http://localhost:8080/api/process_form', {
+    fetch(PROCESS_FORM_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

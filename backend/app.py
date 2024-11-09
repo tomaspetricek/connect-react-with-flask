@@ -3,6 +3,8 @@ import random
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+PORT_NUMBER = 8080
+
 app = Flask(__name__)
 CORS(
     app, resources={r"/api/*": {"origins": "http://localhost:3000"}}
@@ -40,4 +42,4 @@ def get_random_number():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8080)
+    app.run(debug=True, host="0.0.0.0", port=PORT_NUMBER)
